@@ -1,13 +1,12 @@
 package com.rasl;
 
-import java.io.FileInputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import org.intellij.lang.annotations.Language;
+
+import java.io.InputStream;
+import java.sql.*;
 import java.util.Properties;
 
 public class Main {
-    private static Connection connection;
     private static final Properties properties;
     private static final String JDBC_DRIVER;
     private static final String URL;
@@ -15,8 +14,10 @@ public class Main {
     private static final String PASSWORD;
 
     static {
+        String resourceName = "application.properties";
          properties = new Properties();
-        try (FileInputStream inputStream = new FileInputStream("src/main/resources/application.properties")){
+         ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        try (InputStream inputStream = loader.getResourceAsStream(resourceName)){
             properties.load(inputStream);
         } catch (java.io.IOException e) {
             e.printStackTrace();
@@ -28,17 +29,44 @@ public class Main {
     }
 
 
-
     public static void main(String[] args) {
+        System.out.println(findByLogin("login1"));
+        updateLastName(2, "update2");
+    }
 
-        try {
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("Connection opened");
+
+    public static AppSecurityAccount findByLogin(String login){
+        AppSecurityAccount appSecurityAccount = new AppSecurityAccount();
+        @Language("MySQL")
+        String query = "SELECT * FROM app_security_account WHERE login=?";
+        try(Connection connection = DriverManager.getConnection(URL,USER, PASSWORD)){
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, login);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                appSecurityAccount.setAppSecurityAccountId(resultSet.getInt("app_security_account_id"));
+                appSecurityAccount.setLogin(resultSet.getString("login"));
+                appSecurityAccount.setFirstName(resultSet.getString("first_name"));
+                appSecurityAccount.setMiddleName(resultSet.getString("middle_name"));
+                appSecurityAccount.setLastName(resultSet.getString("last_name"));
+            }
+
         } catch (SQLException e){
-            System.out.println("Connection Failed");
             e.printStackTrace();
         }
+        return appSecurityAccount;
+    }
 
-        System.out.println();
+    public static void updateLastName (int id, String lastName){
+        @Language("MySQL")
+        String query = "UPDATE app_security_account SET last_name = ? WHERE app_security_account_id = ?";
+        try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)){
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, lastName);
+            preparedStatement.setInt(2, id);
+            preparedStatement.execute();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }
