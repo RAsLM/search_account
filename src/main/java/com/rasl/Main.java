@@ -26,11 +26,16 @@ public class Main {
         URL = properties.getProperty("datasource.url");
         USER = properties.getProperty("datasource.username");
         PASSWORD = properties.getProperty("datasource.password");
+        try{
+            Class.forName(JDBC_DRIVER);
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
 
     public static void main(String[] args) {
-        System.out.println(findByLogin("login1"));
+        System.out.println(findByLogin("login2"));
         updateLastName(2, "update2");
     }
 
@@ -39,18 +44,18 @@ public class Main {
         AppSecurityAccount appSecurityAccount = new AppSecurityAccount();
         @Language("MySQL")
         String query = "SELECT * FROM app_security_account WHERE login=?";
-        try(Connection connection = DriverManager.getConnection(URL,USER, PASSWORD)){
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = DriverManager.getConnection(URL,USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, login);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                appSecurityAccount.setAppSecurityAccountId(resultSet.getInt("app_security_account_id"));
-                appSecurityAccount.setLogin(resultSet.getString("login"));
-                appSecurityAccount.setFirstName(resultSet.getString("first_name"));
-                appSecurityAccount.setMiddleName(resultSet.getString("middle_name"));
-                appSecurityAccount.setLastName(resultSet.getString("last_name"));
+            try(ResultSet resultSet = preparedStatement.executeQuery()){
+                while (resultSet.next()){
+                    appSecurityAccount.setAppSecurityAccountId(resultSet.getInt("app_security_account_id"));
+                    appSecurityAccount.setLogin(resultSet.getString("login"));
+                    appSecurityAccount.setFirstName(resultSet.getString("first_name"));
+                    appSecurityAccount.setMiddleName(resultSet.getString("middle_name"));
+                    appSecurityAccount.setLastName(resultSet.getString("last_name"));
+                }
             }
-
         } catch (SQLException e){
             e.printStackTrace();
         }
@@ -60,8 +65,8 @@ public class Main {
     public static void updateLastName (int id, String lastName){
         @Language("MySQL")
         String query = "UPDATE app_security_account SET last_name = ? WHERE app_security_account_id = ?";
-        try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD)){
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+        try(Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, lastName);
             preparedStatement.setInt(2, id);
             preparedStatement.execute();
