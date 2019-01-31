@@ -15,7 +15,7 @@ public class DbCredentials {
         String resourceName = "application.properties";
         properties = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        try (InputStream inputStream = null){//loader.getResourceAsStream(resourceName)){
+        try (InputStream inputStream = loader.getResourceAsStream(resourceName)){
             if (inputStream != null) {
                 properties.load(inputStream);
             }

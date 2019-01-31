@@ -37,7 +37,6 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     @Override
     public int updateLastName(int id, String lastName) {
-        int isUpdated = -1;
         @Language("MySQL")
         String query = "UPDATE user_account SET last_name = ? WHERE user_account_id = ?";
         try {
@@ -49,16 +48,15 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, lastName);
             preparedStatement.setInt(2, id);
-            isUpdated = preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return isUpdated;
+        return 0;
     }
 
     @Override
     public int updateLastName(String login, String lastName) {
-        int isUpdated = -1;
         @Language("MySQL")
         String query = "UPDATE user_account SET last_name = ? WHERE login = ?";
         try{
@@ -70,10 +68,10 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
             PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, lastName);
             preparedStatement.setString(2, login);
-            isUpdated = preparedStatement.executeUpdate();
+            return preparedStatement.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return isUpdated;
+        return 0;
     }
 }
