@@ -1,6 +1,6 @@
 package com.rasl;
 
-public class AppSecurityAccount {
+public class UserAccount {
     private Integer appSecurityAccountId;
     private String login;
     private String firstName;
@@ -8,10 +8,10 @@ public class AppSecurityAccount {
     private String lastName;
 
 
-    public AppSecurityAccount() {
+    public UserAccount() {
     }
 
-    public AppSecurityAccount(Integer appSecurityAccountId, String login, String firstName, String middleName, String lastName) {
+    public UserAccount(Integer appSecurityAccountId, String login, String firstName, String middleName, String lastName) {
         this.appSecurityAccountId = appSecurityAccountId;
         this.login = login;
         this.firstName = firstName;
