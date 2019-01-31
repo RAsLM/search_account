@@ -15,12 +15,20 @@ public class DbCredentials {
         String resourceName = "application.properties";
         properties = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        try (InputStream inputStream = loader.getResourceAsStream(resourceName)){
+        try (InputStream inputStream = null){//loader.getResourceAsStream(resourceName)){
             if (inputStream != null) {
                 properties.load(inputStream);
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        String ifNoP = properties.getProperty("datasource.jdbc_driver");
+        if(ifNoP.equals(null)){
+            try {
+                throw new Exception();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         JDBC_DRIVER = properties.getProperty("datasource.jdbc_driver");
         URL = properties.getProperty("datasource.url");
