@@ -2,7 +2,6 @@ package com.rasl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 import java.util.Properties;
 
 public class DbCredentials {
@@ -17,8 +16,10 @@ public class DbCredentials {
         properties = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try (InputStream inputStream = loader.getResourceAsStream(resourceName)){
-            properties.load(Objects.requireNonNull(inputStream));
-        } catch (java.io.IOException e) {
+            if (inputStream != null) {
+                properties.load(inputStream);
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
         JDBC_DRIVER = properties.getProperty("datasource.jdbc_driver");
