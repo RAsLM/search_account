@@ -22,14 +22,6 @@ public class DbCredentials {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String ifNoP = properties.getProperty("datasource.jdbc_driver");
-        if(ifNoP.equals(null)){
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
         JDBC_DRIVER = properties.getProperty("datasource.jdbc_driver");
         URL = properties.getProperty("datasource.url");
         USER = properties.getProperty("datasource.username");
