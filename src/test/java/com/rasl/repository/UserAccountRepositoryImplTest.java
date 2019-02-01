@@ -57,16 +57,34 @@ public class UserAccountRepositoryImplTest {
     }
 
     @Test
-    public void updateLastNameTest() {
+    public void updateLastNameByIdTest() {
         String updateLastName = "newLastName";
         repository.updateLastName(2, updateLastName);
         assertEquals(updateLastName, repository.findByLogin("login2").getLastName());
     }
 
     @Test
-    public void updateLastName1Test() {
+    public void updateLastNameByLoginTest() {
         String updateLastName = "newLastName";
         repository.updateLastName("login3", updateLastName);
         assertEquals(updateLastName, repository.findByLogin("login3").getLastName());
+    }
+
+    @Test
+    public void findByNonexistentLoginTest() {
+        String incorrectLogin = "incorrectLogin";
+        assertNull(repository.findByLogin(incorrectLogin));
+    }
+
+    @Test
+    public void updateLastNameByNonexistentIdTest() {
+        String incorrectLogin = "incorrectLogin";
+        assertEquals(0, repository.updateLastName(10, incorrectLogin));
+    }
+
+    @Test
+    public void updateLastNameByNonexistentLoginTest() {
+        String incorrectLogin = "incorrectLogin";
+        assertEquals(0, repository.updateLastName(incorrectLogin, incorrectLogin));
     }
 }
