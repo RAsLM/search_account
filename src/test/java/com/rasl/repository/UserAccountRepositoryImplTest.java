@@ -56,7 +56,9 @@ public class UserAccountRepositoryImplTest {
     @Test
     public void findByLoginTest() {
         String login = "login2";
+        String incorrectLogin = "incorrectLogin";
         assertEquals(login, repository.findByLogin(login).getLogin());
+        assertNull(repository.findByLogin(incorrectLogin));
     }
 
     @Test
