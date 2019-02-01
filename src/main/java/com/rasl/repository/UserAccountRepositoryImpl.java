@@ -18,7 +18,6 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     @Override
     public UserAccount findByLogin(String login) {
-        UserAccount userAccount = new UserAccount();
         @Language("PostgreSQL")
         String query = "SELECT * FROM user_account WHERE login=?";
         try(Connection connection = DriverManager.getConnection(DbCredentials.URL,DbCredentials.USER, DbCredentials.PASSWORD);
@@ -26,17 +25,19 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
             preparedStatement.setString(1, login);
             try(ResultSet resultSet = preparedStatement.executeQuery()){
                 if (resultSet.next()){
+                    UserAccount userAccount = new UserAccount();
                     userAccount.setAppSecurityAccountId(resultSet.getInt("user_account_id"));
                     userAccount.setLogin(resultSet.getString("login"));
                     userAccount.setFirstName(resultSet.getString("first_name"));
                     userAccount.setMiddleName(resultSet.getString("middle_name"));
                     userAccount.setLastName(resultSet.getString("last_name"));
+                    return userAccount;
                 }
             }
         } catch (SQLException e){
             e.printStackTrace();
         }
-        return userAccount;
+        return null;
     }
 
     @Override
