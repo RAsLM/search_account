@@ -13,24 +13,24 @@ import static org.junit.Assert.*;
 
 public class UserAccountRepositoryImplTest {
 
-    private UserAccountRepositoryImpl repository = new UserAccountRepositoryImpl();
+    private static final String SCHEMA = "schema.sql";
 
-    private static final String schema = "schema.sql";
+    private UserAccountRepositoryImpl repository = new UserAccountRepositoryImpl();
 
     @BeforeClass
     public static void before(){
-        String query = "";
+        StringBuilder query = new StringBuilder();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        try (InputStream inputStream = loader.getResourceAsStream(schema);
+        try (InputStream inputStream = loader.getResourceAsStream(SCHEMA);
              Scanner scanner = new Scanner(inputStream)) {
             while (scanner.hasNextLine()) {
-                query += scanner.nextLine();
+                query.append(scanner.nextLine());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         try(Connection connection = DriverManager.getConnection(DbCredentials.URL, DbCredentials.USER, DbCredentials.PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(query))){
             preparedStatement.execute();
         } catch (SQLException e){
             e.printStackTrace();
