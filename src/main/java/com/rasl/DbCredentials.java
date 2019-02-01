@@ -26,5 +26,6 @@ public class DbCredentials {
         URL = properties.getProperty("datasource.url");
         USER = properties.getProperty("datasource.username");
         PASSWORD = properties.getProperty("datasource.password");
+
     }
 }
