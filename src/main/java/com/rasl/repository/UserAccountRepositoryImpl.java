@@ -8,14 +8,6 @@ import java.sql.*;
 
 public class UserAccountRepositoryImpl implements UserAccountRepository {
 
-    public UserAccountRepositoryImpl() {
-        try{
-            Class.forName(DbCredentials.JDBC_DRIVER);
-        } catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public UserAccount findByLogin(String login) {
         @Language("PostgreSQL")

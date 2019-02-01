@@ -5,15 +5,15 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class DbCredentials {
-    private static final Properties properties;
-    public static final String JDBC_DRIVER;
+
+    private static final String resourceName = "application.properties";
     public static final String URL;
     public static final String USER;
     public static final String PASSWORD;
 
     static {
-        String resourceName = "application.properties";
-        properties = new Properties();
+
+        final Properties properties = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try (InputStream inputStream = loader.getResourceAsStream(resourceName)){
             if (inputStream != null) {
@@ -22,10 +22,14 @@ public class DbCredentials {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        JDBC_DRIVER = properties.getProperty("datasource.jdbc_driver");
+        try{
+            final String JDBC_DRIVER = properties.getProperty("datasource.jdbc_driver");
+            Class.forName(JDBC_DRIVER);
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
         URL = properties.getProperty("datasource.url");
         USER = properties.getProperty("datasource.username");
         PASSWORD = properties.getProperty("datasource.password");
-
     }
 }
