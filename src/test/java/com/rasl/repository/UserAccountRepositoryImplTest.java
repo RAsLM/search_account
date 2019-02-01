@@ -50,24 +50,25 @@ public class UserAccountRepositoryImplTest {
 
     @Test
     public void findByLoginTest() {
-        String login = "login2";
-        String incorrectLogin = "incorrectLogin";
-        assertEquals(login, repository.findByLogin(login).getLogin());
-        assertNull(repository.findByLogin(incorrectLogin));
+        String expectedLogin = "login2";
+        String actualLogin = repository.findByLogin(expectedLogin).getLogin();
+        assertEquals(expectedLogin, actualLogin);
     }
 
     @Test
     public void updateLastNameByIdTest() {
-        String updateLastName = "newLastName";
-        repository.updateLastName(2, updateLastName);
-        assertEquals(updateLastName, repository.findByLogin("login2").getLastName());
+        String expectedUpdatedLastName = "newLastName";
+        repository.updateLastName(2, expectedUpdatedLastName);
+        String actualUpdatedLastName = repository.findByLogin("login2").getLastName();
+        assertEquals(expectedUpdatedLastName, actualUpdatedLastName);
     }
 
     @Test
     public void updateLastNameByLoginTest() {
-        String updateLastName = "newLastName";
-        repository.updateLastName("login3", updateLastName);
-        assertEquals(updateLastName, repository.findByLogin("login3").getLastName());
+        String expectedUpdatedLastName = "newLastName";
+        repository.updateLastName("login3", expectedUpdatedLastName);
+        String actualUpdatedLastName = repository.findByLogin("login3").getLastName();
+        assertEquals(expectedUpdatedLastName, actualUpdatedLastName);
     }
 
     @Test
