@@ -78,13 +78,19 @@ public class UserAccountRepositoryImplTest {
 
     @Test
     public void updateLastNameByNonexistentIdTest() {
-        String incorrectLogin = "incorrectLogin";
-        assertEquals(0, repository.updateLastName(10, incorrectLogin));
+        int incorrectId = 10;
+        String lastName = "lastName";
+        int expectedUpdatedRowsQty = 0;
+        int actualUpdatedRowsQty = repository.updateLastName(incorrectId, lastName);
+        assertEquals(expectedUpdatedRowsQty, actualUpdatedRowsQty);
     }
 
     @Test
     public void updateLastNameByNonexistentLoginTest() {
         String incorrectLogin = "incorrectLogin";
-        assertEquals(0, repository.updateLastName(incorrectLogin, incorrectLogin));
+        String lastName = "lastName";
+        int expectedUpdatedRowsQty = 0;
+        int actualUpdatedRowsQty = repository.updateLastName(incorrectLogin, lastName);
+        assertEquals(expectedUpdatedRowsQty, actualUpdatedRowsQty);
     }
 }
