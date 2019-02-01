@@ -9,8 +9,8 @@ import java.sql.*;
 public class UserAccountRepositoryImpl implements UserAccountRepository {
     @Override
     public UserAccount findByLogin(String login) {
-        UserAccount appSecurityAccount = new UserAccount();
-        @Language("MySQL")
+        UserAccount userAccount = new UserAccount();
+        @Language("PostgreSQL")
         String query = "SELECT * FROM user_account WHERE login=?";
         try{
             Class.forName(DbCredentials.JDBC_DRIVER);
@@ -22,22 +22,22 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
             preparedStatement.setString(1, login);
             try(ResultSet resultSet = preparedStatement.executeQuery()){
                 if (resultSet.next()){
-                    appSecurityAccount.setAppSecurityAccountId(resultSet.getInt("user_account_id"));
-                    appSecurityAccount.setLogin(resultSet.getString("login"));
-                    appSecurityAccount.setFirstName(resultSet.getString("first_name"));
-                    appSecurityAccount.setMiddleName(resultSet.getString("middle_name"));
-                    appSecurityAccount.setLastName(resultSet.getString("last_name"));
+                    userAccount.setAppSecurityAccountId(resultSet.getInt("user_account_id"));
+                    userAccount.setLogin(resultSet.getString("login"));
+                    userAccount.setFirstName(resultSet.getString("first_name"));
+                    userAccount.setMiddleName(resultSet.getString("middle_name"));
+                    userAccount.setLastName(resultSet.getString("last_name"));
                 }
             }
         } catch (SQLException e){
             e.printStackTrace();
         }
-        return appSecurityAccount;
+        return userAccount;
     }
 
     @Override
     public int updateLastName(int id, String lastName) {
-        @Language("MySQL")
+        @Language("PostgreSQL")
         String query = "UPDATE user_account SET last_name = ? WHERE user_account_id = ?";
         try {
             Class.forName(DbCredentials.JDBC_DRIVER);
@@ -57,7 +57,7 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     @Override
     public int updateLastName(String login, String lastName) {
-        @Language("MySQL")
+        @Language("PostgreSQL")
         String query = "UPDATE user_account SET last_name = ? WHERE login = ?";
         try{
             Class.forName(DbCredentials.JDBC_DRIVER);
