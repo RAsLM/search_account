@@ -1,22 +1,26 @@
 package com.rasl.repository;
 
-import com.rasl.DbCredentials;
-import com.rasl.UserAccount;
+import com.rasl.utils.DbCredentials;
+import com.rasl.pojo.UserAccount;
 import org.intellij.lang.annotations.Language;
 
 import java.sql.*;
 
 public class UserAccountRepositoryImpl implements UserAccountRepository {
-    @Override
-    public UserAccount findByLogin(String login) {
-        UserAccount userAccount = new UserAccount();
-        @Language("PostgreSQL")
-        String query = "SELECT * FROM user_account WHERE login=?";
+
+    public UserAccountRepositoryImpl() {
         try{
             Class.forName(DbCredentials.JDBC_DRIVER);
         } catch (ClassNotFoundException e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public UserAccount findByLogin(String login) {
+        UserAccount userAccount = new UserAccount();
+        @Language("PostgreSQL")
+        String query = "SELECT * FROM user_account WHERE login=?";
         try(Connection connection = DriverManager.getConnection(DbCredentials.URL,DbCredentials.USER, DbCredentials.PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, login);
@@ -39,11 +43,6 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     public int updateLastName(int id, String lastName) {
         @Language("PostgreSQL")
         String query = "UPDATE user_account SET last_name = ? WHERE user_account_id = ?";
-        try {
-            Class.forName(DbCredentials.JDBC_DRIVER);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         try (Connection connection = DriverManager.getConnection(DbCredentials.URL, DbCredentials.USER, DbCredentials.PASSWORD);
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, lastName);
@@ -59,11 +58,6 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
     public int updateLastName(String login, String lastName) {
         @Language("PostgreSQL")
         String query = "UPDATE user_account SET last_name = ? WHERE login = ?";
-        try{
-            Class.forName(DbCredentials.JDBC_DRIVER);
-        } catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
         try(Connection connection = DriverManager.getConnection(DbCredentials.URL, DbCredentials.USER, DbCredentials.PASSWORD);
             PreparedStatement preparedStatement = connection.prepareStatement(query)){
             preparedStatement.setString(1, lastName);

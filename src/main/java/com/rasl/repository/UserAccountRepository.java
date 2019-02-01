@@ -1,6 +1,6 @@
 package com.rasl.repository;
 
-import com.rasl.UserAccount;
+import com.rasl.pojo.UserAccount;
 
 public interface UserAccountRepository {
     UserAccount findByLogin(String login);

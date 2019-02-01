@@ -1,4 +1,4 @@
-package com.rasl;
+package com.rasl.pojo;
 
 public class UserAccount {
     private Integer appSecurityAccountId;
