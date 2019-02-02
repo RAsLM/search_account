@@ -15,7 +15,6 @@
         <java.version>1.8</java.version>
     </properties>
 
-
     <dependencies>
 
         <dependency>
@@ -24,6 +23,11 @@
             <version>9.1-901-1.jdbc4</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>15.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>
@@ -36,21 +40,10 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations-java5</artifactId>
-            <version>16.0.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>15.0</version>
-        </dependency>
     </dependencies>
-
 
     <build>
         <plugins>
@@ -62,7 +55,6 @@
                     <target>7</target>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -80,7 +72,6 @@
                     </execution>
                 </executions>
             </plugin>
-
 
             <plugin>
                 <!-- Build an executable JAR -->

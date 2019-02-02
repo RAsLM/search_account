@@ -17,6 +17,8 @@ public class UserAccountRepositoryImplTest {
 
     private UserAccountRepositoryImpl repository = new UserAccountRepositoryImpl();
 
+
+    /**Initialization of test database.*/
     @BeforeClass
     public static void before(){
         StringBuilder query = new StringBuilder();
