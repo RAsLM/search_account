@@ -1,9 +1,9 @@
 package com.rasl.repository;
 
-import com.rasl.pojo.UserAccount;
+import com.rasl.searchSecurityAccount.entity.UserAccount;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserAccountRepository {
-    UserAccount findByLogin(String login);
-    int updateLastName (int id, String lastName);
-    int updateLastName (String login, String lastName);
+public interface UserAccountRepository extends JpaRepository<UserAccount, Integer> {
+
+    void delete(Integer id);
 }
