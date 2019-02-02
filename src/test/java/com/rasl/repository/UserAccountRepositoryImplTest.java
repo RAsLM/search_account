@@ -30,7 +30,7 @@ public class UserAccountRepositoryImplTest {
             e.printStackTrace();
         }
         try(Connection connection = DriverManager.getConnection(DbCredentials.URL, DbCredentials.USER, DbCredentials.PASSWORD);
-            PreparedStatement preparedStatement = connection.prepareStatement(String.valueOf(query))){
+            PreparedStatement preparedStatement = connection.prepareStatement(query.toString())){
             preparedStatement.execute();
         } catch (SQLException e){
             e.printStackTrace();
