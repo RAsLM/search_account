@@ -21,30 +21,30 @@ public class UserAccountController {
 
     @RequestMapping("/user_account/list")
     public String list(Model model){
-
+        model.addAttribute("userAccountLis", userAccountService.list());
         return "user_account/list";
     }
 
-    @RequestMapping("/user_account/details/{id}")
+    @RequestMapping("/user_account/{id}")
     public String card(@PathVariable Integer id, Model model){
-        model.addAttribute("entry", userAccountService.getById(id));
+        model.addAttribute("userAccount", userAccountService.getById(id));
         return "user_account/details";
     }
 
     @RequestMapping("/user_account/new_user_account")
-    public String newIncomeEntry(Model model){
+    public String newUserAccount(Model model){
 
-        return "user_account/new_entry";
+        return "user_account/new_user_account";
     }
 
     @RequestMapping(value = "/user_account/save", method = RequestMethod.POST)
-    public String saveEntry(UserAccount userAccount){
+    public String saveUserAccount(UserAccount userAccount){
 
         return "redirect:/user_account/list";
     }
 
     @RequestMapping("/user_account/edit/{id}")
-    public String editEntry(@PathVariable Integer id, Model model){
+    public String editUserAccount(@PathVariable Integer id, Model model){
 
         return "user_account/new_entry";
 
@@ -52,7 +52,7 @@ public class UserAccountController {
 
     @RequestMapping(value = "/user_account/delete/{id}")
     public String delete(@PathVariable Integer id){
-
+        userAccountService.deleteById(id);
         return "redirect:/user_account/list";
     }
 
