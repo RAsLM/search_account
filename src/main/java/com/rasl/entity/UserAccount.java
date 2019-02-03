@@ -3,7 +3,6 @@ package com.rasl.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 @Builder
 @ToString
@@ -14,9 +13,7 @@ public class UserAccount {
     @Column
     private Integer UserAccountId;
 
-    @Column
-    @NonNull
-    @NotEmpty
+    @Column(nullable = false, unique = true)
     private String login;
 
     @Column

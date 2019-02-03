@@ -1,8 +1,8 @@
 package com.rasl.service.impl;
 
-import com.rasl.searchSecurityAccount.entity.UserAccount;
-import com.rasl.searchSecurityAccount.repository.UserAccountRepository;
-import com.rasl.searchSecurityAccount.service.PojoService;
+import com.rasl.entity.UserAccount;
+import com.rasl.repository.UserAccountRepository;
+import com.rasl.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @Service
-public class UserAccountServiceImpl implements PojoService<UserAccount> {
+public class UserAccountServiceImpl implements UserAccountService<UserAccount> {
 
     private final UserAccountRepository repository;
 
@@ -35,7 +35,7 @@ public class UserAccountServiceImpl implements PojoService<UserAccount> {
     }
 
     @Override
-    public void delete(Integer id) {
-        repository.delete(id);
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
     }
 }
