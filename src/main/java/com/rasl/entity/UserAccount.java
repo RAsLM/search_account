@@ -1,27 +1,39 @@
 package com.rasl.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
-@ToString
 @Getter @Setter
 @Entity
+@AllArgsConstructor @NoArgsConstructor
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserAccount {
+
     @Id
     @Column
-    private Integer UserAccountId;
+    @JsonProperty
+    private Integer userAccountId;
 
+    @JsonProperty
     @Column(nullable = false, unique = true)
     private String login;
 
+    @JsonProperty
     @Column
     private String firstName;
 
+    @JsonProperty
     @Column
     private String middleName;
 
+    @JsonProperty
     @Column
     private String lastName;
+
 }
