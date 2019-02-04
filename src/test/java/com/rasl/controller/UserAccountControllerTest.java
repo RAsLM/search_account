@@ -4,15 +4,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rasl.entity.UserAccount;
 import com.rasl.service.UserAccountService;
-import org.apache.coyote.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -88,9 +89,6 @@ public class UserAccountControllerTest {
 
         UserAccount actualUser = response.getBody();
 
-        System.out.println(response.getStatusCodeValue());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUser, actualUser);
 
         restTemplate.delete(url(1000));
@@ -101,6 +99,19 @@ public class UserAccountControllerTest {
         restTemplate.delete(url(5));
        ResponseEntity<UserAccount> response = restTemplate.getForEntity(url(5), UserAccount.class);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void editUserAccount(){
+        UserAccount expectedUser = UserAccount.builder()
+                .login("login1")
+                .lastName("testEdit1")
+                .build();
+
+        restTemplate.put(url(1), expectedUser, UserAccount.class);
+        ResponseEntity<UserAccount> response = restTemplate.getForEntity(url(1), UserAccount.class);
+        UserAccount actualUser = response.getBody();
+        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
     }
 
     private String url(){

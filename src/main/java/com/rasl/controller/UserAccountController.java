@@ -38,9 +38,23 @@ public class UserAccountController {
 
 
 
-    @PutMapping()
-    public void editUserAccount(@RequestBody UserAccount userAccount){
-        userAccountService.save(userAccount);
+    @PutMapping("/{id}")
+    public void editUserAccount(@PathVariable Integer id, @RequestBody UserAccount userAccount){
+        UserAccount newUserAccount = userAccountService.getById(id);
+        if(!isNullOrEmpty(userAccount.getLogin())){
+            newUserAccount.setLogin(userAccount.getLogin());
+        }
+        if(!isNullOrEmpty(userAccount.getFirstName())){
+            newUserAccount.setFirstName(userAccount.getFirstName());
+        }
+        if(!isNullOrEmpty(userAccount.getMiddleName())){
+            newUserAccount.setMiddleName(userAccount.getMiddleName());
+        }
+        if(!isNullOrEmpty(userAccount.getLastName())){
+            newUserAccount.setLastName(userAccount.getLastName());
+        }
+
+        userAccountService.save(newUserAccount);
     }
 
     @DeleteMapping("/{id}")
@@ -48,4 +62,7 @@ public class UserAccountController {
         userAccountService.deleteById(id);
     }
 
+    private boolean isNullOrEmpty(String str){
+       return str == null || str.isEmpty();
+    }
 }
