@@ -1,38 +1,110 @@
 package com.rasl.controller;
 
-import com.rasl.Application;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rasl.entity.UserAccount;
-import com.rasl.repository.UserAccountRepository;
 import com.rasl.service.UserAccountService;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {
-        Application.class
-})
+import static org.junit.Assert.*;
 
-//@Sql(scripts = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+import java.io.IOException;
+import java.util.List;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserAccountControllerTest {
+
+    private static final String URL = "/users";
 
     @Autowired
     private UserAccountService userAccountService;
 
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     @Test
-    public void listTest() {
-        System.out.println(userAccountService.list().size());
+    public void listTest() throws IOException {
+
+        ResponseEntity<List<UserAccount>> response = restTemplate.exchange(
+                url(),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<UserAccount>>(){}
+        );
+
+        List<UserAccount> actualUsers = response.getBody();
+
+        Resource resource = resourceLoader.getResource("classpath:/data/user_accounts.json");
+
+        List<UserAccount> expectedUsers = objectMapper.readValue(resource.getInputStream(), new TypeReference<List<UserAccount>>(){});
+
+        assertEquals(expectedUsers, actualUsers);
     }
 
     @Test
-    public void getByIdTest() {
+    public void getByIdTest() throws IOException {
+        ResponseEntity<UserAccount> response = restTemplate.getForEntity(url(1), UserAccount.class);
+
+        UserAccount actualUser = response.getBody();
+
+
+        Resource resource = resourceLoader.getResource("classpath:/data/user_account.json");
+        UserAccount expectedUser = objectMapper.readValue(resource.getInputStream(), UserAccount.class);
+
+        assertEquals(expectedUser, actualUser);
     }
 
     @Test
     public void newUserAccountTest() {
+        UserAccount expectedUser = UserAccount.builder()
+                .userAccountId(1000)
+                .login("test1")
+                .firstName("test1")
+                .middleName("test1")
+                .lastName("test1")
+                .build();
+        ResponseEntity<UserAccount> response = restTemplate.postForEntity(url(), expectedUser, UserAccount.class);
+
+        response = restTemplate.getForEntity(url(1000), UserAccount.class);
+
+        UserAccount actualUser = response.getBody();
+
+        assertEquals(expectedUser, actualUser);
+
+        restTemplate.delete(url(1000));
+    }
+
+    @Test
+    public void deleteTest(){
+        restTemplate.delete(url(5));
+        ResponseEntity<UserAccount> response = restTemplate.getForEntity(url(5), UserAccount.class);
+
+        UserAccount actualUser = response.getBody();
+
+        assertNull(actualUser);
+    }
+
+    private String url(){
+        return URL;
+    }
+
+    private String url(Integer id) {
+        return URL + "/" + id;
     }
 }

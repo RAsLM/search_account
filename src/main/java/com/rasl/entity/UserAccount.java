@@ -7,12 +7,14 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
 @Getter @Setter
 @Entity
 @AllArgsConstructor @NoArgsConstructor
-
+@ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@EqualsAndHashCode
 public class UserAccount {
 
     @Id

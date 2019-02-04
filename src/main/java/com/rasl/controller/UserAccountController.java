@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/user_account")
+@RequestMapping("/users")
 public class UserAccountController {
 
     private UserAccountServiceImpl userAccountService;
@@ -36,23 +36,16 @@ public class UserAccountController {
         userAccountService.save(userAccount);
     }
 
-//    @PutMapping(value = "/user_account/{userAccount}")
-//    public String saveUserAccount(@PathVariable UserAccount userAccount){
-//
-//        return "redirect:/user_account/list";
-//    }
-//
-//    @RequestMapping("/user_account/{id}")
-//    public String editUserAccount(@PathVariable Integer id){
-//
-//        return "user_account/new_entry";
-//
-//    }
-//
-//    @DeleteMapping(value = "/user_account/{id}")
-//    public String delete(@PathVariable Integer id){
-//        userAccountService.deleteById(id);
-//        return "redirect:/user_account/list";
-//    }
+
+
+    @PutMapping()
+    public void editUserAccount(@RequestBody UserAccount userAccount){
+        userAccountService.save(userAccount);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id){
+        userAccountService.deleteById(id);
+    }
 
 }
