@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rasl.entity.UserAccount;
 import com.rasl.service.UserAccountService;
+import org.apache.coyote.Response;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -54,6 +56,7 @@ public class UserAccountControllerTest {
 
         List<UserAccount> expectedUsers = objectMapper.readValue(resource.getInputStream(), new TypeReference<List<UserAccount>>(){});
 
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUsers, actualUsers);
     }
 
@@ -63,10 +66,10 @@ public class UserAccountControllerTest {
 
         UserAccount actualUser = response.getBody();
 
-
         Resource resource = resourceLoader.getResource("classpath:/data/user_account.json");
         UserAccount expectedUser = objectMapper.readValue(resource.getInputStream(), UserAccount.class);
 
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUser, actualUser);
     }
 
@@ -85,6 +88,9 @@ public class UserAccountControllerTest {
 
         UserAccount actualUser = response.getBody();
 
+        System.out.println(response.getStatusCodeValue());
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUser, actualUser);
 
         restTemplate.delete(url(1000));
@@ -93,11 +99,8 @@ public class UserAccountControllerTest {
     @Test
     public void deleteTest(){
         restTemplate.delete(url(5));
-        ResponseEntity<UserAccount> response = restTemplate.getForEntity(url(5), UserAccount.class);
-
-        UserAccount actualUser = response.getBody();
-
-        assertNull(actualUser);
+       ResponseEntity<UserAccount> response = restTemplate.getForEntity(url(5), UserAccount.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     private String url(){
