@@ -7,13 +7,11 @@ import com.rasl.service.UserAccountService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +55,6 @@ public class UserAccountControllerTest {
 
         List<UserAccount> expectedUsers = objectMapper.readValue(resource.getInputStream(), new TypeReference<List<UserAccount>>(){});
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUsers, actualUsers);
     }
 
@@ -70,7 +67,6 @@ public class UserAccountControllerTest {
         Resource resource = resourceLoader.getResource("classpath:/data/user_account.json");
         UserAccount expectedUser = objectMapper.readValue(resource.getInputStream(), UserAccount.class);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedUser, actualUser);
     }
 
